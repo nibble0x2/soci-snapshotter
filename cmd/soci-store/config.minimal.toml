@@ -1,0 +1,21 @@
+# Minimal configuration for soci-store local testing
+# Quick start: sudo soci-store --config config.minimal.toml /var/lib/soci-store
+
+# Use in-memory metadata store (recommended for store mode)
+metadata_store = "memory"
+
+# Disable Prometheus metrics for simpler setup
+no_prometheus = true
+
+# Enable background fetching for better performance
+[background_fetch]
+disable = false
+
+# Basic resolver configuration
+[resolver]
+# Add your registry configurations here if needed
+
+# Filesystem configuration
+[fs_config]
+# Verification is automatically disabled in store mode
+disable_verification = true

@@ -1,0 +1,94 @@
+# Sample configuration for soci-store
+# Copy this file to /etc/soci-store/config.toml or specify with --config flag
+
+# Metadata store type: "memory" (default, recommended for store mode) or "db"
+# Note: "db" metadata store is currently not supported in store mode
+metadata_store = "memory"
+
+# Disable Prometheus metrics (set to true to disable metrics)
+no_prometheus = false
+
+# FUSE filesystem configuration
+[fuse]
+# Enable debug logging for FUSE operations
+log_fuse_operations = false
+
+# Background fetch configuration
+# Background fetching prefetches layer data in the background to improve performance
+[background_fetch]
+# Disable background fetching (set to true to disable)
+disable = false
+
+# Period of time (in milliseconds) to wait after the last prefetch before starting a new one
+silence_period_msec = 30000
+
+# Period of time (in milliseconds) between fetching chunks during background fetch
+fetch_period_msec = 10
+
+# Maximum number of chunks that can be queued for background fetching
+max_queue_size = 10000
+
+# Period of time (in seconds) between emitting background fetch metrics
+emit_metric_period_sec = 300
+
+# Registry configuration
+[resolver]
+# Registry host configuration
+# You can specify custom registries and their configurations here
+
+# Example: Configure credentials for a private registry
+# [[resolver.host."docker.io".mirrors]]
+# host = "registry-1.docker.io"
+# insecure = false
+
+# Example: Configure a local registry mirror
+# [[resolver.host."docker.io".mirrors]]
+# host = "localhost:5000"
+# insecure = true
+
+# Example: Skip SSL verification for a registry (not recommended for production)
+# [resolver.host."my-registry.example.com"]
+# skip_verify = true
+# insecure = false
+
+# HTTP client configuration for retryable operations
+[retryable_http_client_config]
+# Maximum number of retry attempts for failed HTTP requests
+max_retry_count = 5
+
+# Minimum wait time (in milliseconds) between retries
+min_wait_msec = 30
+
+# Maximum wait time (in milliseconds) between retries
+max_wait_msec = 300000
+
+# Filesystem configuration
+[fs_config]
+# Disable content verification (recommended for store mode)
+# Content verification is not fully supported in store mode and will be automatically disabled
+disable_verification = true
+
+# Allow invalid mounts (for debugging)
+allow_invalid_mounts_on_restart = false
+
+# Disable background fetch at the filesystem level
+# This is separate from [background_fetch] and controls whether the resolver uses background fetching
+# [fs_config.background_fetch_config]
+# disable = false
+# silence_period_msec = 30000
+# fetch_period_msec = 10
+# max_queue_size = 10000
+# emit_metric_period_sec = 300
+
+# Content store configuration
+# Specifies where SOCI artifacts (indexes and ztocs) are stored
+[content_store]
+# Type of content store: "soci" (local storage) or "containerd" (use containerd's content store)
+# For soci-store, "soci" is recommended to use local storage
+type = "soci"
+
+# Path to containerd socket (only needed if type = "containerd")
+# containerd_address = "/run/containerd/containerd.sock"
+
+# Namespace for containerd content store (only needed if type = "containerd")
+# namespace = "default"

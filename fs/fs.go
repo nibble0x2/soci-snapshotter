@@ -326,7 +326,7 @@ func NewFilesystem(ctx context.Context, root string, cfg config.FSConfig, opts .
 		metricsController:           c,
 		attrTimeout:                 attrTimeout,
 		entryTimeout:                entryTimeout,
-		negativeTimeout:             negativeTimeout,
+		negativeTimeout:             negativeTimeout, 
 		contentStore:                store,
 		bgFetcher:                   bgFetcher,
 		mountTimeout:                mountTimeout,

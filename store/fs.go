@@ -32,6 +32,7 @@ import (
 	"github.com/awslabs/soci-snapshotter/cache"
 	"github.com/awslabs/soci-snapshotter/fs/layer"
 	"github.com/awslabs/soci-snapshotter/fs/remote"
+	"github.com/awslabs/soci-snapshotter/idtools"
 	"github.com/containerd/containerd/reference"
 	"github.com/containerd/log"
 	fusefs "github.com/hanwen/go-fuse/v2/fs"
@@ -70,7 +71,7 @@ func Mount(ctx context.Context, mountpoint string, layerManager *LayerManager, d
 		NullPermissions: true,
 	})
 	mountOpts := &fuse.MountOptions{
-		AllowOther: true, // allow users other than root&mounter to access fs
+		AllowOther: false, // allow users other than root&mounter to access fs
 		FsName:     "stargzstore",
 		Debug:      debug,
 	}
@@ -405,7 +406,7 @@ func (n *layernode) Lookup(ctx context.Context, name string, out *fuse.EntryOut)
 		var cn *fusefs.Inode
 		var errno syscall.Errno
 		err = n.fs.layerMap.add(func(id uint32) (releasable, error) {
-			root, err := l.RootNode(id)
+			root, err := l.RootNode(id, idtools.IDMap{})
 			if err != nil {
 				return nil, err
 			}
